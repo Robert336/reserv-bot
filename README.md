@@ -1,5 +1,7 @@
 # AthleticsCentreBot-Azure-webapp
-### Reference the main project here: https://github.com/Robert336/AthleticsCentreBot
-Reminder: look into K8 (kubernetes)
+## Status: ⏸️ Paused due to exam season
+### Reference the main project [here](https://github.com/Robert336/AthleticsCentreBot)
 
-( not started yet )
+Reminder to-self: look into K8 (kubernetes) and Docker
+
+

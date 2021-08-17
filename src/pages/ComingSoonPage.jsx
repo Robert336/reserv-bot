@@ -1,10 +1,11 @@
 import { Paper, TextField, Button } from '@material-ui/core';
 import styled from 'styled-components';
 import ComingSoonBackground from '../assets/ComingSoonBackground.png';
-
+import ClockWidget from '../components/ClockWidget';
 
 
 const PageDiv = styled.div`    
+    font-family: "Work Sans";
     background-color: transparent;
 
     width: 100vw;
@@ -29,19 +30,25 @@ const InfoDiv = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
+
+
+    overflow: hidden;
 `;
 
 const Title = styled.h1`
     margin: 0em 0em 0em 0em;
     align-self: center;
     margin-bottom: 0.2em;
+    font-size: 5em;
 `;
 
 const SubTitle = styled.h3`
     margin: 0 0 0 0;
-    opacity: 70%;
+    opacity: 80%;
     align-self: center;
     margin: 0.1em;
+
+
 `;
 
 const BackgroundText = styled.img`
@@ -69,13 +76,38 @@ const StyledField = styled(TextField)`
 `;
 
 const StyledButton = styled(Button)`
-    margin-top: 0.5em;
-    margin-left: 0.1em;
+    root: {
+        margin-top: 0.5em;
+        margin-left: 0.1em;
+        backgroundColor: pueple;
+    }
+
 `;
 
 const StyledForm = styled.form`
 
     margin-top: 1em;
+`;
+
+const StyledP = styled.p`
+
+    position: absolute;
+    text-align: center;
+    left: 0;
+    right 0;
+    top: 95vh;
+    bottom: 0;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+`;
+
+const Date = styled.h3`
+
+    color: purple;
+
 `;
 
 
@@ -85,10 +117,11 @@ function ComingSoonPage() {
 
             <InfoDiv>
                 <StyledPaper elevation={3} square="false">
-                    <Title>Reserv</Title>
+                    <ClockWidget />
+                    <Title >Reserv</Title>
                     <SubTitle>Never miss a gym session.</SubTitle>
                     <SubTitle>Instantly auto-book with the click of a button.</SubTitle>
-
+                    <Date>WLU 21/09/10</Date>
                     <StyledForm>
                         <StyledField
                             required
@@ -97,14 +130,17 @@ function ComingSoonPage() {
                             placeholder="candice@email.com"
                             size="small"
                             label="email" />
-                        <StyledButton>notify me</StyledButton>
+                        <StyledButton variant={"contained"}>notify me</StyledButton>
                     </StyledForm>
 
                 </StyledPaper>
             </InfoDiv>
+            <StyledP>Not affiliated with Wilfrid Laurier University</StyledP>
             <BackgroundText src={ComingSoonBackground} />
-        </PageDiv>
+        </PageDiv >
     );
 }
 
 export default ComingSoonPage;
+
+

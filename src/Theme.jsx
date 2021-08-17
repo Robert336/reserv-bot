@@ -1,41 +1,59 @@
+import { createTheme, responsiveFontSizes } from "@material-ui/core";
 import React from "react";
 import { ThemeProvider } from "styled-components";
 
-const theme = {
+let theme = createTheme({
+    typography: {
+        h1: {
+            fontFamily: "Work Sans",
+        }
+
+    },
+
     colors: {
-        black: "#000000",
-        white: "#FFFFFF",
-        lightBlue: "#00C2FF",
-        pink: "#B10DFF",
-        darkBlue: "#536EFF",
-        purple: "#37297F",
-        gold: "#EBB81A",
-        grey: "#404040",
-        mediumGrey: "#838383",
-        lightGrey: "#D4D4D4",
-        lightPurple: "#E6DFFF"
-    },
+        h1: "#000000"
+    }
 
-    fonts: {
-        text: "Work Sans",
-        title: "Work Sans",
-        subTitle: "Work Sans",
-        header: "Work Sans",
-    },
 
-    fontSizes: {
-        small: "0.4rem",
-        smallMedium: "0.6rem",
-        mediumSmall: "0.84rem",
-        medium: "1rem",
-        mediumMedium: "1rem",
-        mediumLarge: "1.2rem",
-        largeMedium: "1.4rem",
-        large: "1.8rem",
-        largeLarge: "2.8rem",
-        extraLarge: "4rem",
-    },
-};
+});
+
+theme = responsiveFontSizes(theme);
+
+// const theme = {
+//     colors: {
+//         black: "#000000",
+//         white: "#FFFFFF",
+//         lightBlue: "#00C2FF",
+//         pink: "#B10DFF",
+//         darkBlue: "#536EFF",
+//         purple: "#37297F",
+//         gold: "#EBB81A",
+//         grey: "#404040",
+//         mediumGrey: "#838383",
+//         lightGrey: "#D4D4D4",
+//         lightPurple: "#E6DFFF"
+//     },
+
+//     fonts: {
+//         text: "Work Sans",
+//         title: "Work Sans",
+//         subTitle: "Work Sans",
+//         header: "Work Sans",
+//     },
+
+//     fontSizes: {
+//         small: "0.4rem",
+//         smallMedium: "0.6rem",
+//         mediumSmall: "0.84rem",
+//         medium: "1rem",
+//         mediumMedium: "1rem",
+//         mediumLarge: "1.2rem",
+//         largeMedium: "1.4rem",
+//         large: "1.8rem",
+//         largeLarge: "2.8rem",
+//         extraLarge: "4rem",
+//     },
+// };
 
 function Theme({ children }) {
     return <ThemeProvider theme={theme}>{children}</ThemeProvider>;

@@ -3,7 +3,8 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
+    Link,
+    Redirect
 } from "react-router-dom";
 
 import ComingSoonPage from "./pages/ComingSoonPage";
@@ -17,7 +18,9 @@ export default function PageRouter() {
             renders the first one that matches the current URL. */}
             <Switch>
                 <Route path="/coming-soon" component={ComingSoonPage} />
-                <Route path="/" component={HomePage} />
+                <Route path="/" component={HomePage}>
+                    <Redirect to="/coming-soon" />
+                </Route>
             </Switch>
 
         </Router>

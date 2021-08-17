@@ -1,4 +1,3 @@
-import './App.css';
 import PageRouter from "./PageRouter";
 import Theme from './Theme';
 

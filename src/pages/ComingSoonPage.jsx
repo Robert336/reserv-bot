@@ -1,4 +1,5 @@
-import { Paper, TextField, Button } from '@material-ui/core';
+import { Paper, TextField } from '@material-ui/core';
+import Button from "@material-ui/core/Button";
 import styled from 'styled-components';
 import ComingSoonBackground from '../assets/ComingSoonBackground.png';
 import ClockWidget from '../components/ClockWidget';
@@ -40,6 +41,7 @@ const Title = styled.h1`
     align-self: center;
     margin-bottom: 0.2em;
     font-size: 5em;
+    text-shadow: -0.05em 0px 0px #EBB81A;
 `;
 
 const SubTitle = styled.h3`
@@ -72,16 +74,24 @@ const StyledPaper = styled(Paper)`
 `;
 
 const StyledField = styled(TextField)`
-    margin-top: 0.5em;
+    && {
+        margin-right: 0.5em;
+    }    
 `;
 
 const StyledButton = styled(Button)`
-    root: {
-        margin-top: 0.5em;
-        margin-left: 0.1em;
-        backgroundColor: pueple;
+    && {
+        font-family: "Work Sans";
+        background-color: #37297F;
+        color: #fff;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        padding: 7px 14px;
+        &:hover {
+        background-color: #5469d4;
+        }
     }
 
+   
 `;
 
 const StyledForm = styled.form`
@@ -106,7 +116,7 @@ const StyledP = styled.p`
 
 const Date = styled.h3`
 
-    color: purple;
+    color: #37297F;
 
 `;
 
@@ -130,7 +140,7 @@ function ComingSoonPage() {
                             placeholder="candice@email.com"
                             size="small"
                             label="email" />
-                        <StyledButton variant={"contained"}>notify me</StyledButton>
+                        <StyledButton>notify me</StyledButton>
                     </StyledForm>
 
                 </StyledPaper>

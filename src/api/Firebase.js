@@ -6,8 +6,10 @@ import "firebase/storage";
 import validator from "validator";
 
 
+const FIREBASE_CONFIG = process.env.FIREBASE_CONFIG;
 
-firebase.initializeApp(config.firebaseConfig);
+firebase.initializeApp(FIREBASE_CONFIG); // using the GitHub secrets
+//firebase.initializeApp(config.firebaseConfig); // using the config.json file
 
 
 const auth = firebase.auth();

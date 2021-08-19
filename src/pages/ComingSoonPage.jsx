@@ -1,8 +1,9 @@
-import { Paper, TextField } from '@material-ui/core';
-import Button from "@material-ui/core/Button";
+import { useState } from 'react';
+import { Paper, TextField, Button } from '@material-ui/core';
 import styled from 'styled-components';
 import ComingSoonBackground from '../assets/ComingSoonBackground.png';
 import ClockWidget from '../components/ClockWidget';
+import Firebase from '../api/Firebase';
 
 
 const PageDiv = styled.div`    
@@ -65,12 +66,14 @@ const BackgroundText = styled.img`
 `;
 
 const StyledPaper = styled(Paper)`
-    padding: 1em 1em 1em 1em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    border-radius: 15px;
+    && {
+        padding: 1em 1em 1em 1em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border-radius: 15px;
+    }
 `;
 
 const StyledField = styled(TextField)`
@@ -122,25 +125,28 @@ const Date = styled.h3`
 
 
 function ComingSoonPage() {
+
+
     return (
         <PageDiv>
 
             <InfoDiv>
-                <StyledPaper elevation={3} square="false">
+                <StyledPaper elevation={3}>
                     <ClockWidget />
                     <Title >Reserv</Title>
                     <SubTitle>Never miss a gym session.</SubTitle>
                     <SubTitle>Instantly auto-book with the click of a button.</SubTitle>
                     <Date>WLU 21/09/10</Date>
-                    <StyledForm>
+                    <StyledForm onSubmit={Firebase.notifyMe}>
                         <StyledField
                             required
+                            type="text"
                             variant="outlined"
                             id="email-input"
                             placeholder="candice@email.com"
                             size="small"
                             label="email" />
-                        <StyledButton>notify me</StyledButton>
+                        <StyledButton type="submit">notify me</StyledButton>
                     </StyledForm>
 
                 </StyledPaper>

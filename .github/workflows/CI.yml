@@ -18,7 +18,5 @@ jobs:
             - name: Install modules
               run: npm install
 
-            - name: Run ESLint
-              run: npm run lint
               env:
                 FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG}}

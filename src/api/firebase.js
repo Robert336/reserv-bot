@@ -45,17 +45,15 @@ if (window.location.hostname === "127.0.0.1") {
 // using the GitHub secrets
 //firebase.initializeApp(config.firebaseConfig); // using the config.json file
 
-async function notifyMe(event) {
-    event.preventDefault();
+async function notifyMe(email) {
 
-    const email = event.target.elements[0].value;
     try {
         // validate input first
-        if (!validator.isEmail(email) || validator.isEmpty(email))
+        if (!validator.isEmail(email) || validator.isEmpty(email)) {
             throw Error("Please enter a valid email address.");
+        }
     } catch (err) {
-        alert(err.message);
-        return;
+        throw Error("Please enter a valid email address.");
     }
 
     // if no error, then add the email to the database
@@ -64,13 +62,13 @@ async function notifyMe(event) {
         email: email
     }
 
-    await db.collection("interested").add(notifyEmail)
+    db.collection("interested").add(notifyEmail)
         .then((docRef) => {
             console.log("Document written with ID: ", docRef.id);
+            return true;
         }).catch((error) => {
             console.error("Error adding document: ", error);
         })
-
 }
 
 export default { firebase, notifyMe };

@@ -5,7 +5,6 @@ import ComingSoonBackground from '../assets/ComingSoonBackground.png';
 import ClockWidget from '../components/ClockWidget';
 import firebase from '../api/firebase';
 
-
 const PageDiv = styled.div`    
     font-family: "Work Sans";
     background-color: transparent;
@@ -93,8 +92,7 @@ const StyledButton = styled(Button)`
         background-color: #5469d4;
         }
     }
-
-   
+    
 `;
 
 const StyledForm = styled.form`
@@ -106,6 +104,7 @@ const StyledP = styled.p`
 
     position: absolute;
     text-align: center;
+    
     left: 0;
     right 0;
     top: 95vh;
@@ -123,9 +122,66 @@ const Date = styled.h3`
 
 `;
 
+const ButtonText = styled.p`
+    font-size: ;
+    color: white;
+    text-align: center;
+    padding-left: 1em;
+    padding-right: 1em;
+`;
+
+
+const Popup = styled.div`
+    width: clamp(10em, 20vw, 50em);
+    height: 3em;
+    border-radius: 4em;
+    background-color: green;
+    
+    display: flex;
+    
+    justify-content: center;
+    align-items: center;
+
+
+    margin: 0.5em;
+    @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+        }
+      
+        to {
+          transform: translateX(0%);
+        }
+    }
+    animation-name: slideIn;
+    animation-duration: 0.3s;
+    animation-timing-function: ease-in-out;
+
+`;
+
 
 function ComingSoonPage() {
 
+    const [isSubmited, setSubmited] = useState(false);
+    const [open, setOpen] = useState(false);
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const email = event.target.elements[0].value;
+        firebase.notifyMe(email)
+            .then(response => {
+                setSubmited(!isSubmited)
+            })
+            .catch(e => {
+                console.log("error with email");
+                alert(e);
+            });
+
+        console.log(isSubmited);
+        if (isSubmited === true) {
+            setOpen(true);
+        }
+
+    }
 
     return (
         <PageDiv>
@@ -137,19 +193,26 @@ function ComingSoonPage() {
                     <SubTitle>Never miss a gym session.</SubTitle>
                     <SubTitle>Instantly auto-book with the click of a button.</SubTitle>
                     <Date>WLU 21/09/10</Date>
-                    <StyledForm onSubmit={firebase.notifyMe}>
+                    <StyledForm onSubmit={handleSubmit}>
                         <StyledField
                             required
+                            /*when the form is submitted, the button is disabled*/
                             type="text"
                             variant="outlined"
                             id="email-input"
                             placeholder="candice@email.com"
                             size="small"
                             label="email" />
-                        <StyledButton type="submit">notify me</StyledButton>
+                        <StyledButton type="submit" disabled={isSubmited}>notify me</StyledButton>
                     </StyledForm>
 
                 </StyledPaper>
+                {isSubmited ?
+                    <Popup open={open}>
+                        <ButtonText>Thanks for your interest!</ButtonText>
+                    </Popup>
+                    : null}
+
             </InfoDiv>
             <StyledP>Not affiliated with Wilfrid Laurier University</StyledP>
             <BackgroundText src={ComingSoonBackground} />

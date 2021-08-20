@@ -3,7 +3,7 @@ import { Paper, TextField, Button } from '@material-ui/core';
 import styled from 'styled-components';
 import ComingSoonBackground from '../assets/ComingSoonBackground.png';
 import ClockWidget from '../components/ClockWidget';
-import Firebase from '../api/Firebase';
+import firebase from '../api/firebase';
 
 
 const PageDiv = styled.div`    
@@ -137,7 +137,7 @@ function ComingSoonPage() {
                     <SubTitle>Never miss a gym session.</SubTitle>
                     <SubTitle>Instantly auto-book with the click of a button.</SubTitle>
                     <Date>WLU 21/09/10</Date>
-                    <StyledForm onSubmit={Firebase.notifyMe}>
+                    <StyledForm onSubmit={firebase.notifyMe}>
                         <StyledField
                             required
                             type="text"

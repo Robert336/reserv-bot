@@ -1,3 +1,6 @@
+
+// test commit to new branch
+
 //import config from '../config.json';
 import firebase from "firebase/app";
 import "firebase/auth";

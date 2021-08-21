@@ -45,9 +45,11 @@ if (window.location.hostname === "127.0.0.1") {
 // using the GitHub secrets
 //firebase.initializeApp(config.firebaseConfig); // using the config.json file
 
-async function notifyMe(email) {
+async function notifyMe(name, email) {
 
     try {
+
+        console.log(name + " " + email);
         // validate input first
         if (!validator.isEmail(email) || validator.isEmpty(email)) {
             throw Error("Please enter a valid email address.");
@@ -58,17 +60,22 @@ async function notifyMe(email) {
 
     // if no error, then add the email to the database
     // create new entry into the notify collection
+    const timeElapsed = Date.now();
+    const date = new Date(timeElapsed);
+    const date_str = date.toISOString();
     const notifyEmail = {
-        email: email
+        name: name,
+        email: email,
+        date: date_str
     }
 
-    db.collection("interested").add(notifyEmail)
+    await db.collection("interested").add(notifyEmail)
         .then((docRef) => {
             console.log("Document written with ID: ", docRef.id);
-            return true;
         }).catch((error) => {
             console.error("Error adding document: ", error);
         })
+
 }
 
 export default { firebase, notifyMe };

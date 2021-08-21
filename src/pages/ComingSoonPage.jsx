@@ -164,15 +164,20 @@ function ComingSoonPage() {
 
     const [isSubmited, setSubmited] = useState(false);
     const [open, setOpen] = useState(false);
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        const email = event.target.elements[0].value;
-        firebase.notifyMe(email)
+
+        console.log(name + " " + email);
+
+        firebase.notifyMe(name, email)
             .then(response => {
                 setSubmited(!isSubmited)
             })
             .catch(e => {
-                console.log("error with email");
+                console.log(e);
                 alert(e);
             });
 
@@ -194,6 +199,18 @@ function ComingSoonPage() {
                     <SubTitle>Instantly auto-book with the click of a button.</SubTitle>
                     <Date>WLU 21/09/10</Date>
                     <StyledForm onSubmit={handleSubmit}>
+
+                        <StyledField
+                            required
+                            /*when the form is submitted, the button is disabled*/
+                            type="text"
+                            variant="outlined"
+                            id="name-input"
+                            placeholder="name"
+                            size="small"
+                            label="name"
+                            onChange={e => setName(e.target.value)} />
+
                         <StyledField
                             required
                             /*when the form is submitted, the button is disabled*/
@@ -202,7 +219,8 @@ function ComingSoonPage() {
                             id="email-input"
                             placeholder="candice@email.com"
                             size="small"
-                            label="email" />
+                            label="email"
+                            onChange={e => setEmail(e.target.value)} />
                         <StyledButton type="submit" disabled={isSubmited}>notify me</StyledButton>
                     </StyledForm>
 

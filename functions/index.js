@@ -9,9 +9,9 @@ admin.initializeApp();
 
 
 // "min hour day-of-the-month month day-of-the-week" (* * * * *) unix cron format
-exports.scheduledFunctionCrontab = functions.pubsub.schedule('30 23 * * *')
-    .timeZone('America/Toronto') // Users can choose timezone - default is America/Los_Angeles
-    .onRun((context) => {
-        console.log('This will be run every day at 11:30 PM Eastern!');
-        return null;
-    });
+// exports.scheduledFunctionCrontab = functions.pubsub.schedule('30 23 * * *')
+//     .timeZone('America/Toronto') // Users can choose timezone - default is America/Los_Angeles
+//     .onRun((context) => {
+//         console.log('This will be run every day at 11:30 PM Eastern!');
+//         return null;
+//     });

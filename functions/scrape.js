@@ -68,6 +68,6 @@ async function scrapeTable(wlu_url) {
 
     });
 
-    console.log(trs);
+    return trs; // array of reservation objects (aka table rows)
 
 }

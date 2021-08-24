@@ -7,10 +7,9 @@ import firebase from '../api/firebase';
 
 const PageDiv = styled.div`    
     font-family: "Work Sans";
-    background-color: transparent;
-
-    width: 100vw;
-    height: 100vh;
+    
+    width: 98vw;
+    height: 98vh;
     overflow: hidden;
 `;
 
@@ -55,9 +54,8 @@ const SubTitle = styled.h3`
 
 const BackgroundText = styled.img`
     position: relative;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 0;
+    margin-right: 0;
 
     height: 130%;
     z-index: -1;

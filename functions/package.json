@@ -10,12 +10,13 @@
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "14"
+    "node": "16"
   },
   "main": "index.js",
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",
     "firebase-admin": "^9.8.0",
+    "firebsae": "^9.16.6",
     "firebase-functions": "^3.14.1",
     "node-fetch": "^2.6.1"
   },

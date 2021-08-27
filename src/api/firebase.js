@@ -1,8 +1,9 @@
 //import config from '../config.json';
-import firebase from "firebase/app";
+import { initializeApp } from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
+import "firebase/functions";
 import validator from "validator";
 
 let FIREBASE_CONFIG = {
@@ -24,9 +25,10 @@ if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'lo
 }
 console.log(FIREBASE_CONFIG);
 
-firebase.initializeApp(FIREBASE_CONFIG);
+const firebaseApp = initializeApp({ FIREBASE_CONFIG });
 //const auth = firebase.auth();
-const db = firebase.firestore();
+const db = firebaseApp.firestore();
+const functions = firebaseApp.functions();
 //const storage = firebase.storage();
 
 /*
@@ -40,6 +42,8 @@ if (window.location.hostname === "127.0.0.1") {
     //auth.useEmulator("http://127.0.0.1:9099/");
     db.useEmulator("127.0.0.1", 8080);
     //storage.useEmulator("http://127.0.0.1:9199/");
+    functions.useEmulator("http://127.0.0.1:5001");
+
 }
 
 // using the GitHub secrets

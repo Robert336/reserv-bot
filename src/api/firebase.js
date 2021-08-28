@@ -1,8 +1,10 @@
 //import config from '../config.json';
 import { initializeApp } from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
-import "firebase/storage";
+import { doc, setDoc } from "@firebase/firestore";
+// import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+//import { getFunctions } from "firestore/functions";
+//import { getStorage } from "firebase/storage";
 import "firebase/functions";
 import validator from "validator";
 
@@ -27,8 +29,8 @@ console.log(FIREBASE_CONFIG);
 
 const firebaseApp = initializeApp({ FIREBASE_CONFIG });
 //const auth = firebase.auth();
-const db = firebaseApp.firestore();
-const functions = firebaseApp.functions();
+const db = getFirestore(firebaseApp);
+//const functions = getFunctions(firebaseApp);
 //const storage = firebase.storage();
 
 /*
@@ -42,7 +44,7 @@ if (window.location.hostname === "127.0.0.1") {
     //auth.useEmulator("http://127.0.0.1:9099/");
     db.useEmulator("127.0.0.1", 8080);
     //storage.useEmulator("http://127.0.0.1:9199/");
-    functions.useEmulator("http://127.0.0.1:5001");
+    //functions.useEmulator("127.0.0.1", 5001);
 
 }
 
@@ -73,13 +75,20 @@ async function notifyMe(name, email) {
         date: date_str
     }
 
-    await db.collection("interested").add(notifyEmail)
+    await setDoc(doc(db, "interested", "interested"), notifyEmail)
         .then((docRef) => {
             console.log("Document written with ID: ", docRef.id);
         }).catch((error) => {
             console.error("Error adding document: ", error);
-        })
+        });
+
+    // await db.collection("interested").add(notifyEmail)
+    //     .then((docRef) => {
+    //         console.log("Document written with ID: ", docRef.id);
+    //     }).catch((error) => {
+    //         console.error("Error adding document: ", error);
+    //     })
 
 }
 
-export default { firebase, notifyMe };
+export default { firebaseApp, notifyMe };

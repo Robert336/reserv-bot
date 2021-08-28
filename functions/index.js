@@ -9,23 +9,18 @@ const functions = require("firebase-functions");
 const FormData = require("form-data");
 const admin = require("firebase-admin"); // firestore
 
-
 admin.initializeApp();
-
 
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
-
 exports.test = functions.pubsub.schedule("every 2 minutes")
     // Users can choose timezone - default is America/Los_Angeles
     .onRun((context) => {
-
         console.log("test pub/sub");
 
     });
-
 //                                              min hr
-exports.scrapeTable = functions.pubsub.schedule("19 22 * * *")
+exports.scrapeTable = functions.pubsub.schedule("30 23 * * *")
     // Users can choose timezone - default is America/Los_Angeles
     .timeZone("America/Toronto")
     .onRun((context) => {
@@ -91,7 +86,6 @@ exports.scrapeTable = functions.pubsub.schedule("19 22 * * *")
                         maxCapacity: maxCapacity,  // total reservations allowed (Int)
                     };
 
-
                     console.log("slot >>>", slot);
 
                     // add the new entry to the batch
@@ -104,14 +98,11 @@ exports.scrapeTable = functions.pubsub.schedule("19 22 * * *")
                     //     .catch((error) => {
                     //         console.log("error adding writing to firestore");
                     //     });
-
                     writes++;
                 });
 
                 // push changes to firestore (locks database until changes are complete)
                 console.log("commiting batch");
                 return batch.commit();
-
             }).catch((error) => console.log("error", error));
-
     });

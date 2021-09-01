@@ -2,7 +2,11 @@ import { Button, Paper } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Link, useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 
+const StyledPaper = styled(Paper)`
+    
+`;
 
 function Dashboard() {
     const [error, setError] = useState("");

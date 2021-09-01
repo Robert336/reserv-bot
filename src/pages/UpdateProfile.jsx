@@ -3,8 +3,9 @@ import { Paper, TextField, Button, FormGroup, FormControl, InputLabel, Input } f
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
-import validator from 'validator';
 import { updatePassword } from '@firebase/auth';
+
+
 
 
 
@@ -54,7 +55,7 @@ export default function UpdateProfile() {
 
     return (
         <AuthProvider>
-            <div>
+            <Paper>
                 <h2>Update Profile</h2>
                 <div>
                     <p>{error}</p>
@@ -77,7 +78,7 @@ export default function UpdateProfile() {
                     <Link to="/dashboard">Cancel</Link>
                 </div>
 
-            </div>
+            </Paper>
         </AuthProvider >
     );
 }

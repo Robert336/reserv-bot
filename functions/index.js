@@ -13,9 +13,9 @@ admin.initializeApp();
 
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
-exports.test = functions.pubsub.schedule("every 2 minutes")
+exports.test = functions.pubsub.schedule("every 1 minutes")
     // Users can choose timezone - default is America/Los_Angeles
-    .onRun((context) => {
+    .onRun(async () => {
         console.log("test pub/sub");
 
     });
@@ -91,13 +91,6 @@ exports.scrapeTable = functions.pubsub.schedule("30 23 * * *")
                     // add the new entry to the batch
                     batch.set(admin.firestore().collection("slots").doc(slot.slotId), slot);
 
-                    // admin.firestore().collection("table").doc(slot.slotId).set(slot)
-                    //     .then((result) => {
-                    //         console.log("firestore write success");
-                    //     })
-                    //     .catch((error) => {
-                    //         console.log("error adding writing to firestore");
-                    //     });
                     writes++;
                 });
 

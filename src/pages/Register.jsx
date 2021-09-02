@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { Paper, TextField, Button, Alert } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
 import validator from 'validator';
@@ -54,6 +54,7 @@ export default function Register() {
     const { signup } = useAuth();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const history = useHistory();
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -75,6 +76,7 @@ export default function Register() {
             setError('');
             setLoading(true);
             await signup(email, password);
+            history.push("/dashboard")
         } catch (error) {
             setError("Failed to create an account");
             console.log(error);

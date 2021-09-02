@@ -72,7 +72,7 @@ export default function Register() {
             setError('');
             setLoading(true);
             await login(email, password);
-            history.push("/Dashboard");
+            history.push("/dashboard");
         } catch (error) {
             setError("Failed to login");
             console.log(error);
@@ -91,7 +91,7 @@ export default function Register() {
                     <StyledForm>
                         <TextField required inputRef={emailRef} label="Email"></TextField>
                         <TextField required inputRef={passwordRef} label="Password"></TextField>
-                        <Button variant="contained" onClick={handleSubmit} disabled={loading}>Login</Button>
+                        <Button color="primary" variant="contained" onClick={handleSubmit} disabled={loading}>Login</Button>
                     </StyledForm>
                     <div>
                         Need an account? <Link to="/register">Sign Up</Link>

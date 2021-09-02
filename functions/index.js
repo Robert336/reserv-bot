@@ -1,8 +1,10 @@
+
 /* eslint-disable object-curly-spacing */
 /* eslint-disable max-len */
 // const getUrls = require("get-urls");
 // const cors = require("cors")({ origin: true });
 // const axios = require('axios');
+
 const cheerio = require("cheerio");
 const fetch = require("node-fetch");
 const functions = require("firebase-functions");
@@ -13,12 +15,11 @@ admin.initializeApp();
 
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
-exports.test = functions.pubsub.schedule("every 1 minutes")
-    // Users can choose timezone - default is America/Los_Angeles
-    .onRun(async () => {
-        console.log("test pub/sub");
-
-    });
+// exports.test = functions.pubsub.schedule("every 1 minutes")
+//     // Users can choose timezone - default is America/Los_Angeles
+//     .onRun(async () => {
+//         console.log("test pub/sub");
+//     });
 //                                              min hr
 exports.scrapeTable = functions.pubsub.schedule("30 23 * * *")
     // Users can choose timezone - default is America/Los_Angeles

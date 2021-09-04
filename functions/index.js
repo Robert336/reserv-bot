@@ -20,6 +20,9 @@ admin.initializeApp();
 //     .onRun(async () => {
 //         console.log("test pub/sub");
 //     });
+
+
+// exports.scrapeTableTest = functions.pubsub.schedule("every 1 minutes")
 //                                              min hr
 exports.scrapeTable = functions.pubsub.schedule("30 23 * * *")
     // Users can choose timezone - default is America/Los_Angeles
@@ -32,71 +35,87 @@ exports.scrapeTable = functions.pubsub.schedule("30 23 * * *")
         formdata.append("Password", "82ex2UW%");
         formdata.append("submit_Login", "Login");
 
-        const myHeaders = new fetch.Headers();
-        myHeaders.append("Cookie", "BIGipServerathletics_pool_https=978586122.47873.0000; PHPSESSID=smr2n9geg52pu2o5qsbipn5id4");
-
         const requestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            body: formdata,
-            redirect: "follow",
-        };
+            method: "GET",
+        }
+        // First make a GET request to retrieve cookies
+        return fetch("https://www.laurierathletics.com/ecommerce/user/index.php", requestOptions)
+            .then((response) => { return response.headers.raw()['set-cookie'] }) // extract cookies from headers
+            .then((cookies => {
 
-        return fetch("https://www.laurierathletics.com/ecommerce/user/home.php", requestOptions)
-            .then((response) => response.text())
-            .then((html) => {
-                const $ = cheerio.load(html);
+                console.log("SET-COOKIE HEADERS >>> " + cookies);
 
-                console.log(html);
+                // create new headers using the cookies retrieved from the GET request.
+                const myHeaders = new fetch.Headers();
+                // myHeaders.append("Cookie", "BIGipServerathletics_pool_https=978586122.47873.0000; PHPSESSID=smr2n9geg52pu2o5qsbipn5id4");
+                myHeaders.append("Cookie", cookies);
 
-                // get a new write batch
-                const batch = admin.firestore().batch();
+                // create a POST request which will login
+                const requestOptions = {
+                    method: "POST",
+                    headers: myHeaders, // inject cookies into new request headers
+                    body: formdata,
+                    redirect: "follow",
+                };
+                // send the POST request to login
+                return fetch("https://www.laurierathletics.com/ecommerce/user/index.php", requestOptions)
+                    .then((response) => response.text()) // get the html in plain text
+                    .then((html) => {
+                        const $ = cheerio.load(html);
 
-                var writes = 0; // max writes = 500
+                        //console.log(html);
 
-                // find all the rows in the table containing resrvation information (slots)
-                $("table > tbody > tr").each((index, tr) => {
-                    console.log("Writes in this batch:", writes);
-                    if (writes >= 500) {
-                        throw new error("max writes reached: >= 500");
-                    }
+                        // get a new write batch (firebase)
+                        const batch = admin.firestore().batch();
 
-                    // get the row data (as an object, not string)
-                    const tds = $(tr).find("td");
+                        var writes = 0; // max writes = 500
 
-                    // combine reservation date and time string to create Date object
-                    const resDateTime = new Date($(tds[3]).text() + "T" + $(tds[4]).text());
+                        // find all the rows in the table containing resrvation information (slots)
+                        $("table > tbody > tr").each((index, tr) => {
+                            console.log("Writes in this batch:", writes);
+                            if (writes >= 500) {
+                                throw new error("max writes reached: >= 500");
+                            }
 
-                    const capacityArr = $(tds[6]).text().split(" "); // convert "0 of 80" to ["0","of","80"] to extract numbers
+                            // get the row data (as an object, not string)
+                            const tds = $(tr).find("td");
 
-                    const maxCapacity = parseInt(capacityArr[2]);
-                    const currCapacity = parseInt(capacityArr[0]);
-                    const duraction = parseInt($(tds[5]).text());
-                    const slotId = $(tds[0]).text();
-                    const sessionType = $(tds[1]).text();
-                    const location = $(tds[2]).text()
+                            // combine reservation date and time string to create Date object
+                            const resDateTime = new Date($(tds[3]).text() + "T" + $(tds[4]).text());
 
-                    // create slot object with all perameters of a resrvation 
-                    const slot = {
-                        slotId: slotId,            // unique id (String) (also used as the document id)
-                        sessionType: sessionType,  // description of the session (String)
-                        location: location,        // (String)
-                        resDateTime: resDateTime,  // date and time of the session (date object)
-                        duraction: duraction,      // length of the session (Int)
-                        currCapacity: currCapacity,// anount of people registered for the session (Int)
-                        maxCapacity: maxCapacity,  // total reservations allowed (Int)
-                    };
+                            const capacityArr = $(tds[6]).text().split(" "); // convert "0 of 80" to ["0","of","80"] to extract numbers
 
-                    console.log("slot >>>", slot);
+                            const maxCapacity = parseInt(capacityArr[2]);
+                            const currCapacity = parseInt(capacityArr[0]);
+                            const duraction = parseInt($(tds[5]).text());
+                            const slotId = $(tds[0]).text();
+                            const sessionType = $(tds[1]).text();
+                            const location = $(tds[2]).text()
 
-                    // add the new entry to the batch
-                    batch.set(admin.firestore().collection("slots").doc(slot.slotId), slot);
+                            // create slot object with all perameters of a resrvation 
+                            const slot = {
+                                slotId: slotId,            // unique id (String) (also used as the document id)
+                                sessionType: sessionType,  // description of the session (String)
+                                location: location,        // (String)
+                                resDateTime: resDateTime,  // date and time of the session (date object)
+                                duraction: duraction,      // length of the session (Int)
+                                currCapacity: currCapacity,// anount of people registered for the session (Int)
+                                maxCapacity: maxCapacity,  // total reservations allowed (Int)
+                            };
 
-                    writes++;
-                });
+                            console.log("slot >>>", slot);
 
-                // push changes to firestore (locks database until changes are complete)
-                console.log("commiting batch");
-                return batch.commit();
-            }).catch((error) => console.log("error", error));
+                            // add the new entry to the batch
+                            batch.set(admin.firestore().collection("slots").doc(slot.slotId), slot);
+
+                            writes++;
+                        });
+
+                        // push changes to firestore (locks database until changes are complete)
+                        console.log("commiting batch");
+                        return batch.commit();
+                    }).catch((error) => console.log("error", error));
+
+            }));
+
     });

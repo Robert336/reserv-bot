@@ -203,9 +203,10 @@ function ComingSoonPage() {
                 <StyledPaper elevation={3}>
                     <ClockWidget />
                     <Title >Reserv</Title>
-                    <SubTitle>We are currently working on a bot to instantly auto-book with the click of a button.</SubTitle>
-                    <SubTitle>If you are a WLU student and are interested in joining the beta testing, Sign-up below!</SubTitle>
-                    <Date>WLU 21/09/10</Date>
+                    <SubTitle>We are currently working on a bot to instantly auto-book sessions at the gym with the click of a button.</SubTitle>
+                    <Date>COMING VERY SOON</Date>
+                    <SubTitle>If you are a WLU student and are interested in joining the beta testing for free, Sign-up below!</SubTitle>
+
                     <StyledForm onSubmit={handleSubmit}>
 
                         <StyledField
@@ -232,11 +233,15 @@ function ComingSoonPage() {
                         <StyledButton type="submit" disabled={isSubmited}>Sign up</StyledButton>
                     </StyledForm>
 
+                    {true && <p align="center">Keep an eye on your inbox in the coming days for updates, and join the new Discord server</p>}
+                    {true && <Button variant="outlined" href="https://discord.gg/TnnvypyM">Join Discord</Button>}
+
                 </StyledPaper>
                 {isSubmited ?
                     <Popup open={open}>
                         <ButtonText>Thanks for your interest!</ButtonText>
                     </Popup>
+
                     : null}
 
             </InfoDiv>

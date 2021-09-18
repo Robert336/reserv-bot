@@ -97,5 +97,6 @@ async function notifyMe(name, email) {
 
 }
 
+
 export { notifyMe, auth, db, functions };
 export default firebaseApp;

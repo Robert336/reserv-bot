@@ -1,3 +1,7 @@
+import { getDoc, getDocs, doc, setDoc, collection, where, query } from 'firebase/firestore';
+import { db } from './firebase';
+const fetch = require("node-fetch");
+
 /*
     API to handle making a reservation on laurierathletics.com
     This will run run client-side version of the reservation system.
@@ -17,25 +21,71 @@
  *  makereservation: 1
  * 
 */
-const fetch = require("node-fetch");
 
-// not used for the x-www-form-urlencoded
-// const FormData = require("form-data"); 
+/**
+ * This will be used to run the bot locally when the user clicks "start"
+ * It will handle checking and reserving all slots that match the requirements of the user
+ * 
+ * @param currentUserUID user's uid
+ * 
+ * @returns slots
+ */
+export function findSlots(currentUserUID) {
+    console.log("Finding slots");
 
-// console.log("Test rserveSlotCredWLU");
+    const userDocRef = doc(db, "users", currentUserUID);
 
-// const reserveResp = resrveSlotCredWLU("mazz8040@mylaurier.ca", "82ex2UW%", "2791");
-// console.log("resposne: " + reserveResp.ok);
-// console.log("End test");
+    return getDoc(userDocRef).then((docSnap) => {
+        const data = docSnap.data();
+        return data.schedule;
+    }).then((schedule) => {
+        // an array of slots to resrve
+        let slotsToReserve = [];
 
-// console.log("Test loginUser");
-// loginUserWLU("mazz8040@mylaurier.ca", "82ex2UW%")
-//     .then(cookies => console.log(cookies));
+        console.log("Schedule", schedule);
+        // interate over each entry in user's booking table
+        //schedule.forEach((item) => {
+        for (let i = 0; i < schedule.length; i++) {
+            const cronArray = schedule[i].cronSchedule.split(" ");
+            console.log("Cron array = ", cronArray);
+            const slotsRef = collection(db, "slots");
 
-// console.log("Test Reserve");
-// resrveSlotCredWLU("mazz8040@mylaurier.ca", "82ex2UW%", "2791")
-//     .then(response => response.text())
-//     .catch(err => console.error(err));
+
+            const q = query(slotsRef, where("sessionType", "==", schedule[i].session));
+            getDocs(q).then((querySnap) => {
+                // interate over all slots with the matching sessionType
+                //console.log(querySnap);
+                querySnap.forEach((doc) => {
+                    const data = doc.data();
+                    //console.log(data);
+
+                    // convert timestamp to JS Date object
+                    const resDateTime = data.resDateTime.toDate();
+
+                    // check if slot is on the correct day and hour as requested
+                    //console.log(resDateTime.getDay(), "==", cronArray[4], "&&", resDateTime.getHours(), "==", cronArray[1]);
+                    //console.log(resDateTime.getDay() == cronArray[4] && resDateTime.getHours() == cronArray[1]);
+                    if (resDateTime.getDay() === parseInt(cronArray[4]) && resDateTime.getHours() === parseInt(cronArray[1])) {
+                        slotsToReserve.push(data.slotId);
+                        console.log("Pushed slot: " + data.slotId);
+                    }
+                });
+            }).catch(err => console.error(err));
+        }
+
+        console.log("slots to reserve (reserve.js): ", slotsToReserve);
+        return new Promise((resolve, reject) => {
+            if (slotsToReserve === undefined && slotsToReserve === null) {
+                reject("Slots not defined, and null");
+            } else if (slotsToReserve.length >= 0) {
+                resolve(slotsToReserve);
+            }
+        });
+    }).catch(err => console.error(err));
+
+
+}
+
 
 
 /**
@@ -124,10 +174,14 @@ function loginUserWLU(email, password) {
 
     const requestOptions = {
         method: "GET",
+        mode: "cors",
     }
     // First make a GET request to retrieve cookies
     return fetch("https://www.laurierathletics.com/ecommerce/user/index.php", requestOptions)
-        .then((response) => { return response.headers.raw()['set-cookie'] }) // extract cookies from headers
+        .then((response) => {
+            console.log(response);
+            return response.headers.raw()['set-cookie'];
+        }) // extract cookies from headers
         .then((cookies) => {
 
             console.log("GET index.php cookies " + cookies);

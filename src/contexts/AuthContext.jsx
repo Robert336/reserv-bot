@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { auth } from '../api/firebase';
+import { auth, db } from '../api/firebase';
+import { setDoc, doc, } from '@firebase/firestore';
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -23,7 +24,10 @@ export function AuthProvider({ children }) {
 
     function signup(email, password) {
 
-        return createUserWithEmailAndPassword(auth, email, password);
+        return createUserWithEmailAndPassword(auth, email, password)
+            .then(cred => {
+                return setDoc(doc(db, "users", cred.user.uid), { beta: true })
+            });
     }
 
     function login(email, password) {

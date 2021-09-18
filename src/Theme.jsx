@@ -5,7 +5,27 @@ const theme = createTheme({
         primary: {
             main: "#EBB81A"
         }
+
     },
+    typography: {
+        h1: {
+
+        },
+        h2: {
+
+        },
+        h3: {
+
+        },
+        h4: {
+            fontFamily: "Work Sans",
+            fontWeight: 700,
+        }
+
+    },
+    shape: {
+        borderRadius: 5
+    }
 });
 
 // const theme = {

@@ -51,10 +51,10 @@ export default function Register() {
     const emailRef = useRef();
     const passwordRef = useRef();
     const passwordConfirmRef = useRef();
-    const { signup } = useAuth();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const history = useHistory();
+    const { signup } = useAuth();
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -93,8 +93,8 @@ export default function Register() {
                     {error && <Alert severity="error" >{error}</Alert>}
                     <StyledForm>
                         <TextField required inputRef={emailRef} label="Email"></TextField>
-                        <TextField required inputRef={passwordRef} label="Password"></TextField>
-                        <TextField required inputRef={passwordConfirmRef} label="Confirm Password"></TextField>
+                        <TextField required type="password" inputRef={passwordRef} label="Password"></TextField>
+                        <TextField required type="password" inputRef={passwordConfirmRef} label="Confirm Password"></TextField>
                         <Button variant="contained" onClick={handleSubmit} disabled={loading}>Register</Button>
                     </StyledForm>
                     <div>

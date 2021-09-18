@@ -90,7 +90,7 @@ export default function Register() {
                     {error && <Alert severity="error" >{error}</Alert>}
                     <StyledForm>
                         <TextField required inputRef={emailRef} label="Email"></TextField>
-                        <TextField required inputRef={passwordRef} label="Password"></TextField>
+                        <TextField required type="password" inputRef={passwordRef} label="Password"></TextField>
                         <Button color="primary" variant="contained" onClick={handleSubmit} disabled={loading}>Login</Button>
                     </StyledForm>
                     <div>

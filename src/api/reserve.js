@@ -30,31 +30,34 @@ const fetch = require("node-fetch");
  * 
  * @returns slots
  */
-export function findSlots(currentUserUID) {
+export async function findSlots(currentUserUID) {
     console.log("Finding slots");
 
     const userDocRef = doc(db, "users", currentUserUID);
 
-    return getDoc(userDocRef).then((docSnap) => {
+    const schedule = await getDoc(userDocRef).then((docSnap) => {
         const data = docSnap.data();
         return data.schedule;
-    }).then((schedule) => {
-        // an array of slots to resrve
-        let slotsToReserve = [];
+    })
 
-        console.log("Schedule", schedule);
-        // interate over each entry in user's booking table
-        //schedule.forEach((item) => {
-        for (let i = 0; i < schedule.length; i++) {
+    // an array of slots to resrve
+    const slotsToReservePromises = [];
+
+
+    console.log("Schedule", schedule);
+    // interate over each entry in user's booking table
+    //schedule.forEach((item) => {
+    for (let i = 0; i < schedule.length; i++) {
+        slotsToReservePromises.push(new Promise((resolve, reject) => {
             const cronArray = schedule[i].cronSchedule.split(" ");
             console.log("Cron array = ", cronArray);
             const slotsRef = collection(db, "slots");
 
-
             const q = query(slotsRef, where("sessionType", "==", schedule[i].session));
-            getDocs(q).then((querySnap) => {
+            const slot = getDocs(q).then((querySnap) => {
                 // interate over all slots with the matching sessionType
                 //console.log(querySnap);
+                let slot;
                 querySnap.forEach((doc) => {
                     const data = doc.data();
                     //console.log(data);
@@ -62,30 +65,30 @@ export function findSlots(currentUserUID) {
                     // convert timestamp to JS Date object
                     const resDateTime = data.resDateTime.toDate();
 
-                    // check if slot is on the correct day and hour as requested
                     //console.log(resDateTime.getDay(), "==", cronArray[4], "&&", resDateTime.getHours(), "==", cronArray[1]);
                     //console.log(resDateTime.getDay() == cronArray[4] && resDateTime.getHours() == cronArray[1]);
-                    if (resDateTime.getDay() === parseInt(cronArray[4]) && resDateTime.getHours() === parseInt(cronArray[1])) {
-                        slotsToReserve.push(data.slotId);
-                        console.log("Pushed slot: " + data.slotId);
+
+                    // check if slot is on the correct day and hour as requested, +4 hours because times is stored in UTC
+                    if (resDateTime.getDay() === parseInt(cronArray[4]) && resDateTime.getHours() + 4 === parseInt(cronArray[1])) {
+                        console.log("Found slot: " + data.slotId);
+                        slot = data.slotId;
                     }
                 });
-            }).catch(err => console.error(err));
-        }
+                return slot;
+            }).catch(err => console.log(err));
 
-        console.log("slots to reserve (reserve.js): ", slotsToReserve);
-        return new Promise((resolve, reject) => {
-            if (slotsToReserve === undefined && slotsToReserve === null) {
-                reject("Slots not defined, and null");
-            } else if (slotsToReserve.length >= 0) {
-                resolve(slotsToReserve);
+            console.log("Slot from doc: ", slot);
+            if (slot) {
+                resolve(slot);
             }
-        });
-    }).catch(err => console.error(err));
 
 
+        }));
+    }
+
+    console.log(slotsToReservePromises);
+    return await Promise.all(slotsToReservePromises);
 }
-
 
 
 /**
@@ -93,126 +96,126 @@ export function findSlots(currentUserUID) {
  * @param email // (String) user's email to wlu ac
  * @param password // (String) user's password to wlu ac
  * @param slotID // (String) Id of the slot to reserve
- * 
+ *
  * @returns promise of server response object
  */
-function resrveSlotCredWLU(email, password, slotID) {
+// function resrveSlotCredWLU(email, password, slotID) {
 
-    return loginUserWLU(email, password)
-        .then(cookies => {
-            const myHeaders = new fetch.Headers();
-            myHeaders.append("Cookie", cookies);
-            myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+//     return loginUserWLU(email, password)
+//         .then(cookies => {
+//             const myHeaders = new fetch.Headers();
+//             myHeaders.append("Cookie", cookies);
+//             myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
-            const urlencoded = new URLSearchParams();
-            urlencoded.append("waiver1", "Agree");
-            urlencoded.append("waiver2", "Agree");
-            urlencoded.append("SlotID", slotID);
-            urlencoded.append("makereservation", "1");
+//             const urlencoded = new URLSearchParams();
+//             urlencoded.append("waiver1", "Agree");
+//             urlencoded.append("waiver2", "Agree");
+//             urlencoded.append("SlotID", slotID);
+//             urlencoded.append("makereservation", "1");
 
-            console.log("urlencoded: " + urlencoded);
-            console.log("MyHeaders: " + myHeaders.get('Cookie'));
+//             console.log("urlencoded: " + urlencoded);
+//             console.log("MyHeaders: " + myHeaders.get('Cookie'));
 
-            const requestOptions = {
-                method: "POST",
-                headers: myHeaders, // inject cookies into new request headers
-                body: urlencoded,
-                redirect: "follow",
-            };
+//             const requestOptions = {
+//                 method: "POST",
+//                 headers: myHeaders, // inject cookies into new request headers
+//                 body: urlencoded,
+//                 redirect: "follow",
+//             };
 
-            return requestOptions;
-        })
-        .then((requestOptions) => {
-            return fetch("https://www.laurierathletics.com/ecommerce/user/backendcrud.php", requestOptions);
-        })
-        .catch(err => console.log("ERROR WITH LOGIN PROCESS >>> " + err));
-}
+//             return requestOptions;
+//         })
+//         .then((requestOptions) => {
+//             return fetch("https://www.laurierathletics.com/ecommerce/user/backendcrud.php", requestOptions);
+//         })
+//         .catch(err => console.log("ERROR WITH LOGIN PROCESS >>> " + err));
+// }
 
 /**
  * Reserves a slot using user's credentials
  * @param cookies // cookies from a logged-in session
  * @param slotID // ID of the slot to reserve
- * 
+ *
  * @returns promise of server response object
  */
-function resrveSlotCookieWLU(cookies, slotID) {
+// function resrveSlotCookieWLU(cookies, slotID) {
 
-    const myHeaders = new fetch.Headers();
-    myHeaders.append("Cookie", cookies);
-    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+//     const myHeaders = new fetch.Headers();
+//     myHeaders.append("Cookie", cookies);
+//     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
-    const urlencoded = new URLSearchParams();
-    urlencoded.append("waiver1", "Agree");
-    urlencoded.append("waiver2", "Agree");
-    urlencoded.append("SlotID", slotID);
-    urlencoded.append("makereservation", "1");
+//     const urlencoded = new URLSearchParams();
+//     urlencoded.append("waiver1", "Agree");
+//     urlencoded.append("waiver2", "Agree");
+//     urlencoded.append("SlotID", slotID);
+//     urlencoded.append("makereservation", "1");
 
-    console.log("urlencoded: " + urlencoded);
-    console.log("MyHeaders: " + myHeaders.get('Cookie'));
+//     console.log("urlencoded: " + urlencoded);
+//     console.log("MyHeaders: " + myHeaders.get('Cookie'));
 
-    const requestOptions = {
-        method: "POST",
-        headers: myHeaders, // inject cookies into new request headers
-        body: urlencoded,
-        redirect: "follow",
-    };
+//     const requestOptions = {
+//         method: "POST",
+//         headers: myHeaders, // inject cookies into new request headers
+//         body: urlencoded,
+//         redirect: "follow",
+//     };
 
-    return fetch("https://www.laurierathletics.com/ecommerce/user/backendcrud.php", requestOptions)
-        .catch(error => console.error("Error sending reserve request: ", error));
-}
+//     return fetch("https://www.laurierathletics.com/ecommerce/user/backendcrud.php", requestOptions)
+//         .catch(error => console.error("Error sending reserve request: ", error));
+// }
 
 
-/**
- * Login to wlu athlectics centre
- * @param email // user's email to wlu ac
- * @param password // user's password to wlu ac
- * @returns loggedInCookies // Array of Cookies accosiated with the logged-in user
- */
-function loginUserWLU(email, password) {
+// /**
+//  * Login to wlu athlectics centre
+//  * @param email // user's email to wlu ac
+//  * @param password // user's password to wlu ac
+//  * @returns loggedInCookies // Array of Cookies accosiated with the logged-in user
+//  */
+// function loginUserWLU(email, password) {
 
-    console.log("Start Login");
+//     console.log("Start Login");
 
-    const requestOptions = {
-        method: "GET",
-        mode: "cors",
-    }
-    // First make a GET request to retrieve cookies
-    return fetch("https://www.laurierathletics.com/ecommerce/user/index.php", requestOptions)
-        .then((response) => {
-            console.log(response);
-            return response.headers.raw()['set-cookie'];
-        }) // extract cookies from headers
-        .then((cookies) => {
+//     const requestOptions = {
+//         method: "GET",
+//         mode: "cors",
+//     }
+//     // First make a GET request to retrieve cookies
+//     return fetch("https://www.laurierathletics.com/ecommerce/user/index.php", requestOptions)
+//         .then((response) => {
+//             console.log(response);
+//             return response.headers.raw()['set-cookie'];
+//         }) // extract cookies from headers
+//         .then((cookies) => {
 
-            console.log("GET index.php cookies " + cookies);
+//             console.log("GET index.php cookies " + cookies);
 
-            // create new headers using the cookies retrieved from the GET request.
-            const myHeaders = new fetch.Headers();
-            // myHeaders.append("Cookie", "BIGipServerathletics_pool_https=978586122.47873.0000; PHPSESSID=smr2n9geg52pu2o5qsbipn5id4");
-            myHeaders.append("Cookie", cookies);
-            myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+//             // create new headers using the cookies retrieved from the GET request.
+//             const myHeaders = new fetch.Headers();
+//             // myHeaders.append("Cookie", "BIGipServerathletics_pool_https=978586122.47873.0000; PHPSESSID=smr2n9geg52pu2o5qsbipn5id4");
+//             myHeaders.append("Cookie", cookies);
+//             myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
-            const urlencoded = new URLSearchParams();
-            urlencoded.append("UserLogin", email);
-            urlencoded.append("Password", password);
-            urlencoded.append("submit_Login", "Login");
+//             const urlencoded = new URLSearchParams();
+//             urlencoded.append("UserLogin", email);
+//             urlencoded.append("Password", password);
+//             urlencoded.append("submit_Login", "Login");
 
-            // create a POST request which will login
-            const requestOptions = {
-                method: "POST",
-                headers: myHeaders, // inject cookies into new request headers
-                body: urlencoded,
-                redirect: "follow",
-            }
-            // send the POST request to login
-            fetch("https://www.laurierathletics.com/ecommerce/user/index.php", requestOptions)
-                .catch((error) => {
-                    console.error("Error with login" + error);
-                    alert("Error logging into WLU Athletics Centre");
-                });
-            return cookies
-        }).catch((error) => {
-            console.error("Error loading index.php" + error);
-            alert("Error getting WLU Athlectics Centre login page");
-        });
-}
+//             // create a POST request which will login
+//             const requestOptions = {
+//                 method: "POST",
+//                 headers: myHeaders, // inject cookies into new request headers
+//                 body: urlencoded,
+//                 redirect: "follow",
+//             }
+//             // send the POST request to login
+//             fetch("https://www.laurierathletics.com/ecommerce/user/index.php", requestOptions)
+//                 .catch((error) => {
+//                     console.error("Error with login" + error);
+//                     alert("Error logging into WLU Athletics Centre");
+//                 });
+//             return cookies
+//         }).catch((error) => {
+//             console.error("Error loading index.php" + error);
+//             alert("Error getting WLU Athlectics Centre login page");
+//         });
+// }

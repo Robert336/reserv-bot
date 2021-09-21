@@ -57,7 +57,8 @@ exports.scrapeTable = functions.pubsub.schedule("50 * * * *")
                         var writes = 0; // max writes = 500
 
                         // find all the rows in the table containing resrvation information (slots)
-                        $("table > tbody > tr").each((index, tr) => {
+                        // 
+                        $("#DataTables_Table_1 > tbody > tr").each((index, tr) => {
                             console.log("Writes in this batch:", writes);
                             if (writes >= 500) {
                                 throw new error("max writes reached: >= 500");

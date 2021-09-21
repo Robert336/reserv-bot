@@ -16,7 +16,6 @@ import BookingPreferenceTable from '../components/BookingPreferenceTable';
 import { functions } from "../api/firebase";
 import { findSlots } from '../api/reserve';
 import { httpsCallable } from '@firebase/functions';
-import { PasswordRounded } from '@material-ui/icons';
 
 const Header = styled.div`
     background: white;    
@@ -57,13 +56,12 @@ export default function Dashboard() {
 
                 findSlots(currentUser.uid)
                     .then((slots) => {
-                        const slotsArray = slots;
-                        console.log("slots to reserve: ", slotsArray);
+                        console.log("slots to reserve: ", slots);
                         console.log("Cookies", cookiesArray);
                         reserveSlots({
                             slotIDs: slots,
                             cookies: cookiesArray
-                        })
+                        });
                     })
                     .then(response => { console.log(response) })
                     .catch(err => console.error(err));

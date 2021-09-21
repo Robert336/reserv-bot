@@ -21,12 +21,12 @@ let FIREBASE_CONFIG = {
     measurementId: "G-W1LWS1W67M"
 };
 
-if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
-    FIREBASE_CONFIG = {
-        "apiKey": process.env.REACT_APP_FIREBASE_API_KEY,
-        "projectId": "reserv-dev"
-    }; // .env file data (localhost)
-}
+// if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+//     FIREBASE_CONFIG = {
+//         "apiKey": process.env.REACT_APP_FIREBASE_API_KEY,
+//         "projectId": "reserv-dev"
+//     }; // .env file data (localhost)
+// }
 console.log(FIREBASE_CONFIG);
 
 const firebaseApp = initializeApp(FIREBASE_CONFIG);

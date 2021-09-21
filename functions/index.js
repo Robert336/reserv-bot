@@ -112,7 +112,10 @@ exports.reserveSlotsCookieWLU = functions.https.onCall(async (data) => {
             redirect: "follow",
         };
 
-        return fetch("https://www.laurierathletics.com/ecommerce/user/backendcrud.php", requestOptions);
+        fetch("https://www.laurierathletics.com/ecommerce/user/backendcrud.php", requestOptions)
+            .then(response => {
+                return response.data;
+            });
     });
 
     const responseArray = await Promise.all(responsePromises);

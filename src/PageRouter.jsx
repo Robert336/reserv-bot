@@ -15,6 +15,7 @@ import Login from "./pages/Login"
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import UpdateProfile from "./pages/UpdateProfile";
+import LandingPage from "./pages/LandingPage";
 
 export default function PageRouter() {
     return (
@@ -27,6 +28,7 @@ export default function PageRouter() {
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/register" component={Register} />
                     <Route path="/forgot-password" component={ForgotPassword} />
+                    <Route exact path="/" component={LandingPage} />
                     <PrivateRoute exact path="/dashboard" component={Dashboard} />
                     <PrivateRoute path="/update-profile" component={UpdateProfile} />
                 </Switch>

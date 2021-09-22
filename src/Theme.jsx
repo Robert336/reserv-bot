@@ -8,6 +8,8 @@ const theme = createTheme({
 
     },
     typography: {
+        fontFamily: "Work Sans",
+
         h1: {
 
         },
@@ -20,9 +22,13 @@ const theme = createTheme({
         h4: {
             fontFamily: "Work Sans",
             fontWeight: 700,
+        },
+        h5: {
+            fontWeight: 500,
         }
 
     },
+
     shape: {
         borderRadius: 5
     }

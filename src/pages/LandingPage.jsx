@@ -104,7 +104,9 @@ function ComingSoonPage() {
                     <Title>Reserv</Title>
                     <Typography variant="h4" align="center">Make booking spots at the gym easier</Typography>
                     <Typography variant="h5">Reserve your sessions around your weekly schedule</Typography>
-                    <Typography>Sign up for the beta, it's free</Typography>
+                    <br></br>
+                    <Typography variant="subtitle">Sign up for the free beta, it's currently only available for Laurier.</Typography>
+                    <br></br>
                     <div>
                         <Button variant="contained" color="primary" size="large" onClick={handleSignUp}>Sign up</Button>
                         <Button size="large" onClick={handleLogin}>Login</Button>
@@ -122,5 +124,3 @@ function ComingSoonPage() {
 }
 
 export default ComingSoonPage;
-
-

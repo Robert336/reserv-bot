@@ -93,6 +93,8 @@ export default function Dashboard() {
                 <StyledPaper>
                     <Button variant="outlined" onClick={handleLogout}>Logout</Button>
                     {/* <Button variant="outlined" to="/update-profile">Update Profile</Button> */}
+                    <Button variant="outlined" color="secondary" href="https://discord.gg/VmBdr5FEB5">Join Discord</Button>
+                    <Button variant="outlined" color="secondary" href="https://discord.gg/VmBdr5FEB5">Report Bug</Button>
                     <BookingPreferenceTable currentUser={currentUser} />
                 </StyledPaper>
             </Container>

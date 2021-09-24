@@ -12,13 +12,14 @@ import validator from "validator";
 
 */
 let FIREBASE_CONFIG = {
-    apiKey: "AIzaSyABBBlukEzmazXjZp_QPytuo722SLtTwZI",
-    authDomain: "reserv-dev.firebaseapp.com",
-    projectId: "reserv-dev",
-    storageBucket: "reserv-dev.appspot.com",
-    messagingSenderId: "987246716040",
-    appId: "1:987246716040:web:d61b0c44564d01f051ab3d",
-    measurementId: "G-W1LWS1W67M"
+    apiKey: "AIzaSyDRd-5s4XyKcqhfQ66ecSLFGaztHZjq2_M",
+    authDomain: "reserv-323222.firebaseapp.com",
+    databaseURL: "https://reserv-323222-default-rtdb.firebaseio.com",
+    projectId: "reserv-323222",
+    storageBucket: "reserv-323222.appspot.com",
+    messagingSenderId: "173348046260",
+    appId: "1:173348046260:web:7680fb1b10314d54361ee1",
+    measurementId: "G-X0K21D26TS"
 };
 
 // if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {

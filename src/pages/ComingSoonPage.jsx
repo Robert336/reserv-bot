@@ -16,7 +16,9 @@ const PageDiv = styled.div`
 const InfoDiv = styled.div`
     
     position: absolute;
-    
+
+    max-width: 40em;
+
     left: 0;
     right 0;
     top: 0;
@@ -47,7 +49,8 @@ const SubTitle = styled.h3`
     margin: 0 0 0 0;
     opacity: 80%;
     align-self: center;
-    margin: 0.1em;
+    text-align: center;
+    margin: 0.5em;
 
 
 `;
@@ -64,6 +67,7 @@ const BackgroundText = styled.img`
 
 const StyledPaper = styled(Paper)`
     && {
+        max-width: 35em;
         padding: 1em 1em 1em 1em;
         display: flex;
         justify-content: center;
@@ -76,6 +80,8 @@ const StyledPaper = styled(Paper)`
 const StyledField = styled(TextField)`
     && {
         margin-right: 0.5em;
+        margin-bottom: 0.5em;
+        
     }    
 `;
 
@@ -86,6 +92,7 @@ const StyledButton = styled(Button)`
         color: #fff;
         box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
         padding: 7px 14px;
+
         &:hover {
         background-color: #5469d4;
         }
@@ -96,6 +103,9 @@ const StyledButton = styled(Button)`
 const StyledForm = styled.form`
 
     margin-top: 1em;
+    display: block;
+    
+
 `;
 
 const StyledP = styled.p`
@@ -193,9 +203,10 @@ function ComingSoonPage() {
                 <StyledPaper elevation={3}>
                     <ClockWidget />
                     <Title >Reserv</Title>
-                    <SubTitle>Never miss a gym session.</SubTitle>
-                    <SubTitle>Instantly auto-book with the click of a button.</SubTitle>
-                    <Date>WLU 21/09/10</Date>
+                    <SubTitle>We are currently working on a bot to instantly auto-book sessions at the gym with the click of a button.</SubTitle>
+                    <Date>COMING VERY SOON</Date>
+                    <SubTitle>If you are a WLU student and are interested in joining the beta testing for free, Sign-up below!</SubTitle>
+
                     <StyledForm onSubmit={handleSubmit}>
 
                         <StyledField
@@ -219,14 +230,18 @@ function ComingSoonPage() {
                             size="small"
                             label="email"
                             onChange={e => setEmail(e.target.value)} />
-                        <StyledButton type="submit" disabled={isSubmited}>notify me</StyledButton>
+                        <StyledButton type="submit" disabled={isSubmited}>Sign up</StyledButton>
                     </StyledForm>
+
+                    {true && <p align="center">Keep an eye on your inbox in the coming days for updates, and join the new Discord server</p>}
+                    {true && <Button variant="outlined" href="https://discord.gg/TnnvypyM">Join Discord</Button>}
 
                 </StyledPaper>
                 {isSubmited ?
                     <Popup open={open}>
                         <ButtonText>Thanks for your interest!</ButtonText>
                     </Popup>
+
                     : null}
 
             </InfoDiv>

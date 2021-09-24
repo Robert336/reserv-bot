@@ -26,3 +26,4 @@ yarn-error.log*
 config.js
 config.json
 *.log
+.runtimeconfig.json

@@ -1,23 +1,38 @@
-import { createTheme, responsiveFontSizes } from "@material-ui/core";
+import { createTheme, responsiveFontSizes, ThemeProvider } from "@material-ui/core";
 import React from "react";
-import { ThemeProvider } from "styled-components";
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: "#EBB81A"
+        }
 
-let theme = createTheme({
+    },
     typography: {
+        fontFamily: "Work Sans",
+
         h1: {
+
+        },
+        h2: {
+
+        },
+        h3: {
+
+        },
+        h4: {
             fontFamily: "Work Sans",
+            fontWeight: 700,
+        },
+        h5: {
+            fontWeight: 500,
         }
 
     },
 
-    colors: {
-        h1: "#000000"
+    shape: {
+        borderRadius: 5
     }
-
-
 });
-
-theme = responsiveFontSizes(theme);
 
 // const theme = {
 //     colors: {

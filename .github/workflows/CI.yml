@@ -28,3 +28,4 @@ jobs:
                 FIREBASE_MESSAGE_SENDER_ID: ${{ secrets.FIREBASE_MESSAGE_SENDER_ID}}
                 FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID}}
                 FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET}}
+                DEV_FIREBASE_API_KEY: ${{ secrets.DEV_FIREBASE_API_KEY}}

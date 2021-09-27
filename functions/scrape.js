@@ -58,7 +58,7 @@ exports.scrapeTable = functions.pubsub.schedule("50 * * * *")
 
                         // find all the rows in the table containing resrvation information (slots)
                         // 
-                        $("#DataTables_Table_1 > tbody > tr").each((index, tr) => {
+                        $("#DataTables_Table_1 > tbody").each((index, tr) => {
                             console.log("Writes in this batch:", writes);
                             if (writes >= 500) {
                                 throw new error("max writes reached: >= 500");
@@ -77,7 +77,7 @@ exports.scrapeTable = functions.pubsub.schedule("50 * * * *")
                             const duraction = parseInt($(tds[5]).text());
                             const slotId = $(tds[0]).text();
                             let sessionType = $(tds[1]).text();
-                            const location = $(tds[2]).text()
+                            const location = $(tds[2]).text();
 
                             // sanitize sessionType by removing special characters and " - Sep 12" 
                             sessionType = sessionType.substring(0, sessionType.indexOf(" - "));

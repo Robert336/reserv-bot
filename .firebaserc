@@ -1,7 +1,6 @@
 {
   "projects": {
     "default": "reserv-323222",
-    "reserv-323222": "reserv",
     "reserv-dev": "reserv-dev"
   },
   "targets": {}

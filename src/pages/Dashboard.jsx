@@ -67,7 +67,7 @@ export default function Dashboard() {
                     .catch(err => console.error(err));
             })
             .catch(err => console.error(err))
-            .finally(setStarted(false));
+        setStarted(false);
 
     }
 

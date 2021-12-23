@@ -1,0 +1,12 @@
+{
+    "firebaseConfig": {
+        "apiKey": "AIzaSyDRd-5s4XyKcqhfQ66ecSLFGaztHZjq2_M",
+        "authDomain": "reserv-323222.firebaseapp.com",
+        "databaseURL": "https://reserv-323222-default-rtdb.firebaseio.com",
+        "projectId": "reserv-323222",
+        "storageBucket": "reserv-323222.appspot.com",
+        "messagingSenderId": "173348046260",
+        "appId": "1:173348046260:web:7680fb1b10314d54361ee1",
+        "measurementId": "G-X0K21D26TS"
+    }
+}

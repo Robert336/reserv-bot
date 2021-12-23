@@ -18,7 +18,7 @@ exports.scrapeTable = functions.pubsub.schedule("50 * * * *")
 
         const formdata = new FormData();
         formdata.append("UserLogin", "mazz8040@mylaurier.ca");
-        formdata.append("Password", "82ex2UW%");
+        formdata.append("Password", "PASSWORD_HERE"); // CHANGE PASSWORD
         formdata.append("submit_Login", "Login");
 
         const requestOptions = {
@@ -45,11 +45,11 @@ exports.scrapeTable = functions.pubsub.schedule("50 * * * *")
                 };
                 // send the POST request to login
                 return fetch("https://www.laurierathletics.com/ecommerce/user/index.php", requestOptions)
-                    .then((response) => response.text()) // get the html in plain text
+                    .then((response) => response.text()) // get the html in plain text 
                     .then((html) => {
                         const $ = cheerio.load(html);
 
-                        //console.log(html);
+                        console.log(html);
 
                         // get a new write batch (firebase)
                         const batch = admin.firestore().batch();
